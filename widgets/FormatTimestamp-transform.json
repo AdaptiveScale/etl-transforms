@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "spec-version": "1.4",
+    "label": "Timestamp Formatting"
+  },
+  "configuration-groups": [
+    {
+      "label": "Timestamp Formatting Configuration",
+      "properties": [
+        {
+          "widget-type": "textbox",
+          "label": "Timestamp Field",
+          "name": "TimestampField",
+          "widget-attributes": {
+            "width": "large"
+          }
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Date Pattern",
+          "name": "DatePattern",
+          "widget-attributes": {
+            "width": "large"
+          }
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Date Field",
+          "name": "DateField",
+          "widget-attributes": {
+            "width": "large"
+          }
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Drop Timestamp",
+          "name": "DropTimestamp",
+          "widget-attributes": {
+            "width": "large"
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": []
+}

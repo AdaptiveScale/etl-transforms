@@ -1,0 +1,232 @@
+{
+    "name": "Time_Formatter_copy",
+    "artifact": {
+        "name": "cdap-data-pipeline",
+        "version": "4.2.0",
+        "scope": "SYSTEM"
+    },
+    "__ui__": {
+        "nodes": [
+            {
+                "name": "Stream",
+                "plugin": {
+                    "name": "Stream",
+                    "type": "batchsource",
+                    "label": "Stream",
+                    "artifact": {
+                        "name": "core-plugins",
+                        "version": "1.7.0",
+                        "scope": "SYSTEM"
+                    },
+                    "properties": {
+                        "format": "csv",
+                        "name": "customStream",
+                        "duration": "1d",
+                        "schema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"}]}"
+                    }
+                },
+                "outputSchema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"}]}",
+                "type": "batchsource",
+                "label": "Stream",
+                "icon": "icon-streams",
+                "_uiPosition": {
+                    "top": "254px",
+                    "left": "346.5px"
+                },
+                "$$hashKey": "object:20334"
+            },
+            {
+                "name": "FormatTimestamp",
+                "plugin": {
+                    "name": "FormatTimestamp",
+                    "type": "transform",
+                    "label": "FormatTimestamp",
+                    "artifact": {
+                        "name": "etl-transforms",
+                        "version": "1.0.0",
+                        "scope": "SYSTEM"
+                    },
+                    "properties": {
+                        "DropTimestamp": "false"
+                    }
+                },
+                "outputSchema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"date\",\"type\":\"string\"}]}",
+                "inputSchema": [
+                    {
+                        "name": "Stream",
+                        "schema": "{\"name\":\"etlSchemaBody\",\"type\":\"record\",\"fields\":[{\"name\":\"headers\",\"type\":{\"type\":\"map\",\"keys\":\"string\",\"values\":\"string\"}},{\"name\":\"ts\",\"type\":\"string\"}]}"
+                    }
+                ],
+                "type": "transform",
+                "label": "FormatTimestamp",
+                "icon": "fa-plug",
+                "_uiPosition": {
+                    "top": "254px",
+                    "left": "646.5px"
+                },
+                "$$hashKey": "object:20335"
+            },
+            {
+                "name": "Table",
+                "plugin": {
+                    "name": "Table",
+                    "type": "batchsink",
+                    "label": "Table",
+                    "artifact": {
+                        "name": "core-plugins",
+                        "version": "1.7.0",
+                        "scope": "SYSTEM"
+                    },
+                    "properties": {
+                        "schema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"date\",\"type\":\"string\"}]}",
+                        "name": "CustomTable",
+                        "schema.row.field": "ts"
+                    }
+                },
+                "outputSchema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"date\",\"type\":\"string\"}]}",
+                "inputSchema": [
+                    {
+                        "name": "FormatTimestamp",
+                        "schema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"date\",\"type\":\"string\"}]}"
+                    }
+                ],
+                "type": "batchsink",
+                "label": "Table",
+                "icon": "icon-table",
+                "_uiPosition": {
+                    "top": "254px",
+                    "left": "946.5px"
+                },
+                "$$hashKey": "object:20336"
+            }
+        ],
+        "connections": [
+            {
+                "from": "Stream",
+                "to": "FormatTimestamp"
+            },
+            {
+                "from": "FormatTimestamp",
+                "to": "Table"
+            }
+        ]
+    },
+    "config": {
+        "resources": {
+            "memoryMB": 512,
+            "virtualCores": 1
+        },
+        "driverResources": {
+            "memoryMB": 512,
+            "virtualCores": 1
+        },
+        "schedule": "0 * * * *",
+        "connections": [
+            {
+                "from": "Stream",
+                "to": "FormatTimestamp"
+            },
+            {
+                "from": "FormatTimestamp",
+                "to": "Table"
+            }
+        ],
+        "comments": [],
+        "postActions": [],
+        "engine": "mapreduce",
+        "stages": [
+            {
+                "name": "Stream",
+                "plugin": {
+                    "name": "Stream",
+                    "type": "batchsource",
+                    "label": "Stream",
+                    "artifact": {
+                        "name": "core-plugins",
+                        "version": "1.4.0",
+                        "scope": "SYSTEM"
+                    },
+                    "properties": {
+                        "format": "csv",
+                        "name": "customStream",
+                        "duration": "1d",
+                        "schema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"}]}"
+                    }
+                },
+                "outputSchema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"}]}",
+                "type": "batchsource",
+                "label": "Stream",
+                "icon": "icon-streams",
+                "_uiPosition": {
+                    "top": "254px",
+                    "left": "346.5px"
+                },
+                "$$hashKey": "object:20334"
+            },
+            {
+                "name": "FormatTimestamp",
+                "plugin": {
+                    "name": "FormatTimestamp",
+                    "type": "transform",
+                    "label": "FormatTimestamp",
+                    "artifact": {
+                        "name": "etl-transforms",
+                        "version": "1.0.0",
+                        "scope": "SYSTEM"
+                    },
+                    "properties": {
+                        "DropTimestamp": "false"
+                    }
+                },
+                "outputSchema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"date\",\"type\":\"string\"}]}",
+                "inputSchema": [
+                    {
+                        "name": "Stream",
+                        "schema": "{\"name\":\"etlSchemaBody\",\"type\":\"record\",\"fields\":[{\"name\":\"headers\",\"type\":{\"type\":\"map\",\"keys\":\"string\",\"values\":\"string\"}},{\"name\":\"ts\",\"type\":\"string\"}]}"
+                    }
+                ],
+                "type": "transform",
+                "label": "FormatTimestamp",
+                "icon": "fa-plug",
+                "_uiPosition": {
+                    "top": "254px",
+                    "left": "646.5px"
+                },
+                "$$hashKey": "object:20335"
+            },
+            {
+                "name": "Table",
+                "plugin": {
+                    "name": "Table",
+                    "type": "batchsink",
+                    "label": "Table",
+                    "artifact": {
+                        "name": "core-plugins",
+                        "version": "1.4.0",
+                        "scope": "SYSTEM"
+                    },
+                    "properties": {
+                        "schema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"date\",\"type\":\"string\"}]}",
+                        "name": "CustomTable",
+                        "schema.row.field": "ts"
+                    }
+                },
+                "outputSchema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"date\",\"type\":\"string\"}]}",
+                "inputSchema": [
+                    {
+                        "name": "FormatTimestamp",
+                        "schema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"date\",\"type\":\"string\"}]}"
+                    }
+                ],
+                "type": "batchsink",
+                "label": "Table",
+                "icon": "icon-table",
+                "_uiPosition": {
+                    "top": "254px",
+                    "left": "946.5px"
+                },
+                "$$hashKey": "object:20336"
+            }
+        ]
+    }
+}
