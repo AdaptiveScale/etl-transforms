@@ -40,14 +40,10 @@ import javax.annotation.Nullable;
  * ETL Transform that formats a timestamp into a human readable string.
  */
 // TODO: annotate the plugin
-@Plugin(type = "transform")
-@Name("FormatTimestamp")
-@Description("This is an example transform.")
 public class TimestampFormatter extends Transform<StructuredRecord, StructuredRecord> {
   private final Map<Schema, Schema> schemaCache = Maps.newHashMap();
   private SimpleDateFormat dateFormat;
   // TODO: add a config variable
-  private Config config;
 
   public static class Config extends PluginConfig {
     @Description("name of the field that contains the timestamp. Defaults to 'ts'.")
@@ -69,12 +65,6 @@ public class TimestampFormatter extends Transform<StructuredRecord, StructuredRe
     private final Boolean dropTimestamp;
 
     // TODO: add a constructor to set plugin defaults
-    private Config() {
-      this.timestampField = "ts";
-      this.datePattern = "yyyy-MM-dd'T'HH:mm:ss.SSS";
-      this.dateField = "date";
-      this.dropTimestamp = true;
-    }
   }
 
   @Override
@@ -87,7 +77,6 @@ public class TimestampFormatter extends Transform<StructuredRecord, StructuredRe
   @Override
   public void transform(StructuredRecord input, Emitter<StructuredRecord> emitter) throws Exception {
     // TODO: get the timestamp from the input record
-    long ts = input.get(config.timestampField);
     Date date = new Date(ts);
     String dateString = dateFormat.format(date);
 
@@ -97,7 +86,6 @@ public class TimestampFormatter extends Transform<StructuredRecord, StructuredRe
     StructuredRecord.Builder builder = StructuredRecord.builder(outputSchema);
 
     // TODO: set output record fields
-    builder.set(config.dateField, dateString);
     for (Schema.Field field : outputSchema.getFields()) {
       if (!field.getName().equals(config.dateField)) {
         builder.set(field.getName(), input.get(field.getName()));
